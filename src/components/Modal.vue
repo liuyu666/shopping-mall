@@ -65,6 +65,7 @@ export default {
                 console.log(res.data)
                 sessionStorage.setItem("userName",res.data.user.username)
                 sessionStorage.setItem("userToken",res.data.token)
+                sessionStorage.setItem("userId",res.data.user._id)
                 // this.$store.dispatch("setUser",res.data.user.username)
                 // this.$store.dispatch("setToken",res.data.token)
 

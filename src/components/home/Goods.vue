@@ -17,7 +17,7 @@
         <span>库存：</span><span>{{item.num}}</span>
       </div>
       <!-- 加入购物车 -->
-      <div class="join">
+      <div class="join" @click="addCart(item._id)">
         <span>{{join}}</span>
       </div>
     </div>
@@ -35,6 +35,31 @@ export default {
       
     }
   },
+  methods:{
+    addCart(id){
+      this.$axios({
+        method:"post",
+        url:"http://localhost:3000/api/addcart",
+        data:{
+          userId:sessionStorage.getItem("userId"),
+          _id:id
+        },
+        headers:{
+            'Content-Type': 'application/json;charset=UTF-8',  //指定消息格式
+        },
+      }).then(res=>{
+        console.log(res.data);
+        if(res.data.status){
+          alert("失败"+res.msg)
+        }else{
+            alert("加入成功")
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+    }
+  }
+  
 }
 </script>
 
@@ -42,9 +67,9 @@ export default {
 <style scoped>
 .goods{
   display: flex;
-  flex-wrap: wrap
+  flex-wrap: wrap;
 }
-.goodsBox:hover{
+.goodsBox:hover .goodsImg{
   border: 1px solid red;
   transform:translateY(4px);
   -webkit-transform:translateY(4px);
@@ -52,7 +77,8 @@ export default {
   -moz-transform:translateY(4px);
 }
 .goodsBox{
-    flex-grow: 1;
+    /* flex-flow: 0 意思是剩余有空间不会填满 */
+    flex-grow: 0;
     flex-basis: 140px;
     width: 150px;
     height: 230px;

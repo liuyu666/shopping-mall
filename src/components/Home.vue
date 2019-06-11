@@ -26,6 +26,12 @@ export default {
       goodsList: []
     }
   },
+  mounted(){
+    this.bus.$on("resGoods",(data)=>{
+      console.log(data);
+      this.goodsList = data;
+    })
+  },
   components:{
       "left-nav":LeftNav,
       "goods":Goods,
@@ -33,18 +39,24 @@ export default {
   },
   beforeCreate(){
       this.$axios({
-        method:"get",
+        method:"post",
         url:"http://localhost:3000/api/showgoods",
+        data:{
+          sort:0,
+          page:0,
+          pageSize:4
+        },
         headers:{
             'Content-Type': 'application/json;charset=UTF-8',  //指定消息格式
         },
       }).then(res=>{
         console.log(res.data)
         this.goodsList = res.data
+        this.bus.$emit("resGoods",this.goodsList)
       }).catch(err=>err)
   },
   methods:{
-    
+
   }
 }
 </script>
@@ -58,6 +70,7 @@ export default {
     }
     .stable{
         width: 140px;
+        height: 220px;
         border: 1px solid greenyellow;
         margin: 20px
     }
